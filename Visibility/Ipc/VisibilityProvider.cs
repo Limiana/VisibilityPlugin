@@ -17,6 +17,7 @@ public class VisibilityProvider: IDisposable
 	public const string LabelProviderAddToWhitelist = "Visibility.AddToWhitelist";
 	public const string LabelProviderRemoveFromWhitelist = "Visibility.RemoveFromWhitelist";
 	public const string LabelProviderEnable = "Visibility.Enable";
+	public const string LabelOnDetermineCharacterVisibility = "Visibility.OnDetermineCharacterVisibility";
 
 	internal readonly ICallGateProvider<int>? providerApiVersion;
 	internal readonly ICallGateProvider<IEnumerable<string>>? providerGetVoidListEntries;
@@ -26,6 +27,7 @@ public class VisibilityProvider: IDisposable
 	internal readonly ICallGateProvider<string, uint, string, object>? providerAddToWhitelist;
 	internal readonly ICallGateProvider<string, uint, object>? providerRemoveFromWhitelist;
 	internal readonly ICallGateProvider<bool, object>? providerEnable;
+	internal readonly ICallGateProvider<nint, bool?[], object>? providerOnDetermineCharacterVisibility;
 
 	internal readonly IVisibilityApi api;
 
@@ -119,6 +121,16 @@ public class VisibilityProvider: IDisposable
 		catch (Exception e)
 		{
 			Service.PluginLog.Error($"Error registering IPC provider for {LabelProviderEnable}:\n{e}");
+		}
+
+		try
+		{
+			this.providerOnDetermineCharacterVisibility =
+				Service.PluginInterface.GetIpcProvider<nint, bool?[], object>(LabelOnDetermineCharacterVisibility);
+		}
+		catch (Exception e)
+		{
+			Service.PluginLog.Error($"Error registering IPC provider for {LabelOnDetermineCharacterVisibility}:\n{e}");
 		}
 	}
 

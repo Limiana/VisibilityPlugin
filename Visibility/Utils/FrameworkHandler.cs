@@ -207,6 +207,15 @@ public class FrameworkHandler: IDisposable
 			return;
 		}
 
+		bool?[] ipcResult = [null];
+		VisibilityPlugin.Instance.IpcProvider.providerOnDetermineCharacterVisibility!.SendMessage((nint)characterPtr, ipcResult);
+		if (ipcResult[0] != null)
+		{
+			if (ipcResult[0] == false)
+				this.HideGameObject(characterPtr);
+			return;
+		}
+
 		this.containers[UnitType.Players][ContainerType.All][characterPtr->GameObject.EntityId] =
 			Environment.TickCount64;
 
